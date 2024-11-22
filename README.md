@@ -1,4 +1,4 @@
-# Final Project Proposal
+# Final Project 
 
 ---
 
