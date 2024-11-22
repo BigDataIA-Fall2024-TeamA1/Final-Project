@@ -5,7 +5,7 @@
 
 
 ---
-##Contribution Breakdown:
+Contribution Breakdown:
 - Chiu Meng Che: 34%
 - Shraddha Bhandarkar: 33%
 - Kefan Zhang: 33%
