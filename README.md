@@ -13,6 +13,11 @@ WE ATTEST THAT WE HAVEN'T USED ANY OTHER STUDENTS' WORK IN OUR ASSIGNMENT AND AB
 
 ---
 
+## Workflow Diagram
+
+![workflow](images/workflow_diagram.jpeg)
+
+---
 ## Project Overview
 
 ### 1. Introduction  
