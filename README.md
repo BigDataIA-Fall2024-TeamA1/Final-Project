@@ -1,185 +1,154 @@
-# Proposed Architecture
+# Final Project
 
-## 1. Data Ingestion and Preprocessing
 
-### Source: CourtListener
-- Use the CourtListener API or scrape legal documents and metadata, such as:
-  - Case title, court, date, case description, and outcomes.
+**Contribution Breakdown**:
+- Chiu Meng Che: 34%
+- Shraddha Bhandarkar: 33%
+- Kefan Zhang: 33%
 
-### Preprocessing
-- **Text Cleaning**: Remove irrelevant text, legal jargon, or formatting issues.
-- **Metadata Extraction**:
-  - Extract key fields like dates, parties involved, case type, legal citations, and outcomes.
-- **Embedding Generation**:
-  - Convert case descriptions and legal text into vector embeddings using pre-trained models such as:
-    - `text-embedding-ada-002` (OpenAI)
-    - `all-MiniLM-L6-v2` (HuggingFace)
-- **Fraud Labeling**:
-  - If labeled data is available, add flags for fraudulent cases or disputes as metadata.
-
-### ETL Pipeline
-- Automate the ingestion process with **Apache Airflow** to periodically fetch and preprocess data.
-- Store raw data in **Snowflake** or a similar data warehouse for historical tracking.
 
 ---
 
-## 2. Pinecone Vector Database
+## Repository Guidelines
 
-### Index Setup
-- Store embeddings in **Pinecone**, indexed by metadata such as:
-  - Case title, court, and year.
-  - Fraud likelihood (if labeled).
-  - Dispute type (e.g., coverage, liability, etc.).
-
-### Similarity Search
-- Use Pinecone to retrieve similar cases based on input embeddings.
-- Example: Find past fraud-related cases that match the description of a new claim.
+1. **Submission Rules**:  
+   - No code changes or pushes are allowed after the submission date (except for edits to `README.md`).  
+2. **Codelab Documentation**:  
+   - A detailed Codelab document describing the project journey is included.  
+   - This `README.md` serves as a guide to the repository contents.  
+3. **Repository Privacy**:  
+   - The repository will remain private until the deadline to prevent plagiarism.  
 
 ---
 
-## 3. Multi-Agent System with LangGraph
+## Project Overview
 
-### Agent Design
-Design agents to handle specific tasks using **LangGraph** for coordination. These agents dynamically interact based on user queries.
+### 1. Introduction  
 
-#### Key Agents
-1. **Data Retrieval Agent**:
-   - Queries Pinecone to find relevant cases.
-   - Filters results based on metadata (e.g., fraud flags, court type).
+**Background**:  
+This project addresses inefficiencies in legal document management and analysis by leveraging modern data processing pipelines and machine learning models to enhance fraud detection, dispute categorization, and decision-making.  
 
-2. **Fraud Analysis Agent**:
-   - Uses an **LLM** to analyze case descriptions for red flags.
-   - Example prompt:  
-     `"Does this text suggest potential fraud? Why or why not?"`
-   - Outputs a fraud likelihood score with an explanation.
-
-3. **Dispute Categorization Agent**:
-   - Categorizes cases into predefined dispute types (e.g., coverage disputes, liability disputes).
-   - Suggests relevant precedents.
-
-4. **Summarization Agent**:
-   - Uses an LLM to summarize retrieved cases for easier understanding.
-   - Example prompt:  
-     `"Summarize this legal case in less than 200 words, focusing on the main legal issues and outcome."`
-
-5. **Recommendation Agent**:
-   - Suggests actionable next steps for the user.
-   - Example:  
-     `"Based on similar cases, the dispute can likely be resolved by referencing [Policy Clause X]."`
-
-6. **Legal Chatbot Agent**:
-   - Provides a conversational interface for users to dynamically ask questions or refine searches.
-
-### LangGraph Coordination
-- Handles task chaining and parallelization:
-  - Example:  
-    `Query → Similarity Search (Data Retrieval Agent) → Fraud Detection Agent → Summarization Agent → Recommendation Agent`
+**Objective**:  
+Develop an end-to-end system that automates data ingestion, preprocessing, and legal document analysis, enabling users to interact with results through an intuitive application.  
 
 ---
 
-## 4. Backend and Frontend
+### 2. Scope  
 
-### Backend
-- **FastAPI**:
-  - Acts as the API layer connecting the agents, Pinecone, and the front-end.
-  - Handles:
-    - Querying Pinecone.
-    - Invoking LangChain/LLM pipelines.
-    - Processing metadata filters (e.g., fraud or dispute flags).
+**Boundaries**:  
+- **Data Sources**: CourtListener API for legal documents.  
+- **Technologies**: Apache Airflow, FastAPI, Streamlit, Pinecone, OpenAI GPT-4, and Snowflake.  
+- **Deliverables**: A fully functional application with a backend API, ETL pipeline, and an interactive front-end interface.
 
-### Frontend
-- **Streamlit**:
-  - Interactive dashboard where users can:
-    - Search for cases.
-    - Upload documents to analyze fraud risk or dispute categorization.
-    - View summaries and recommendations.
+**Stakeholders**:  
+- Legal professionals seeking insights from past cases.  
+- Organizations aiming to enhance fraud detection and dispute resolution processes.
 
 ---
 
-## 5. Fraud Detection System
+### 3. Problem Statement  
 
-### Model Training
-- Train a **Fraud Classification Model**:
-  - Use labeled fraud cases from CourtListener or synthetic datasets.
-  - Features:
-    - **Textual Patterns**:
-      - Vagueness, over-assertion, or contradictory language in case descriptions.
-    - **Metadata Anomalies**:
-      - Repeated claims from the same policyholder, inconsistent dates, or unrealistic damage amounts.
-  - Use libraries such as **scikit-learn**, **XGBoost**, or **PyTorch**.
+**Current Challenges**:  
+- Manual analysis of legal documents is time-intensive and prone to errors.  
+- Limited tools for automated fraud detection and dispute categorization.  
 
-### LLM-Powered Analysis
-- Fine-tuned **LLM**:
-  - Use domain-specific prompts for fraud detection.
-  - Example prompt:  
-    `"Analyze the following claim description and identify potential signs of fraud. Provide reasoning."`
-  - Incorporate the LLM as an additional layer for contextual fraud analysis.
-
-### Pinecone Integration
-- Store fraud-related embeddings in Pinecone for retrieval and similarity search.
-- Use embeddings to find similar flagged cases and compare patterns.
+**Opportunities**:  
+- Streamlined legal analysis using AI-powered automation.  
+- Improved decision-making with detailed case summaries and recommendations.  
 
 ---
 
-## 6. Dispute Analysis
+### 4. Methodology  
 
-### Case Categorization
-- Train an ML model or use zero-shot classification with **LLMs** to categorize disputes (e.g., liability disputes, policy misinterpretations).
-- Add dispute categories as metadata in Pinecone.
+**Data Sources**:  
+- CourtListener API or scraped legal documents.  
 
-### Outcome Prediction
-- Use past case outcomes (e.g., resolved, dismissed) to predict the likelihood of success for new disputes.
-- Train an ML model with case metadata and textual features.
+**Technologies and Tools**:  
+- **ETL**: Apache Airflow.  
+- **Backend**: FastAPI for API management.  
+- **Frontend**: Streamlit for user interaction.  
+- **Data Storage**: Snowflake for structured data and Pinecone for vector embeddings.  
+- **Models**: OpenAI GPT-4, HuggingFace embeddings, and fraud detection classifiers.  
 
-### Document Comparison
-- Use LLMs to compare uploaded claim documents against court precedents.
-- Example:  
-  `"Does this claim align with similar successful cases?"`
+**Data Pipeline Design**:  
+1. **Ingestion**: Automate fetching and storing raw data.  
+2. **Preprocessing**: Clean text, extract metadata, generate embeddings, and add fraud labels.  
+3. **Storage**: Store raw and processed data in appropriate databases.  
 
----
-
-## 7. Example Query Flow
-
-1. **User Action**:
-   - A user uploads a claim document or types a query:  
-     `"Is this claim fraudulent?"`
-
-2. **Pipeline Execution**:
-   - Data Retrieval Agent queries Pinecone for similar cases.
-   - Fraud Analysis Agent evaluates the uploaded document and retrieved cases.
-   - Summarization Agent condenses findings.
-   - Recommendation Agent provides next steps.
-
-3. **Output**:
-   - The user sees:
-     - Fraud likelihood score.
-     - Similar cases with summaries.
-     - Recommended actions.
+**Data Processing and Transformation**:  
+- Use Python-based EDA to explore data and ensure quality transformations.  
+- Convert legal text into embeddings for similarity search and categorization.
 
 ---
 
-## Technology Stack
+### 5. Project Plan and Timeline  
 
-- **Data Storage**:
-  - **Snowflake** (structured data) and **Pinecone** (vector embeddings).
-- **LLMs**:
-  - **OpenAI GPT-4**: Summarization, fraud detection, and recommendations.
-  - **HuggingFace Models**: Embedding generation and fine-tuning.
-- **LangChain/LangGraph**:
-  - To build and manage multi-agent workflows.
-- **Backend**:
-  - **FastAPI**: API management.
-- **ETL**:
-  - **Apache Airflow**: Data ingestion and preprocessing.
-- **Frontend**:
-  - **Streamlit**: User interaction.
+**Milestones and Deliverables**:  
+1. **Week 1-2**: Data ingestion pipeline setup with Apache Airflow.  
+2. **Week 3-4**: Preprocessing scripts for text cleaning and embedding generation.  
+3. **Week 5**: Pinecone integration for similarity search.  
+4. **Week 6**: Backend API development with FastAPI.  
+5. **Week 7**: Frontend dashboard implementation with Streamlit.  
+6. **Week 8**: Testing and deployment on a cloud platform.  
+
+**Timeline**:  
+- Detailed timeline is available in the GitHub Project section.  
 
 ---
 
-## Benefits
+### 6. Resources and Team  
 
-1. **Fraud Detection**: Combines embeddings, LLMs, and classification for robust fraud analysis.
-2. **Dispute Analysis**: Categorizes disputes and predicts outcomes based on historical data.
-3. **Precedent Retrieval**: Finds and summarizes similar cases to support decision-making.
-4. **Scalability**: Pinecone and LangChain allow scaling across large datasets.
-5. **User-Friendly**: Streamlit provides an accessible interface for legal professionals.
+**Personnel**:  
+- **Member 1**: Backend development and API integration.  
+- **Member 2**: Frontend development and user interface design.  
+- **Member 3**: ETL pipeline and model implementation.  
+
+---
+
+### 7. Risks and Mitigation Strategies  
+
+**Potential Risks**:  
+1. Inconsistent or missing data from external APIs.  
+2. Integration challenges between components (ETL, backend, frontend).  
+
+**Mitigation Strategies**:  
+- Perform data quality checks during ingestion.  
+- Use containerization (Docker) to ensure seamless integration.  
+
+---
+
+### 8. Expected Outcomes and Benefits  
+
+**Measurable Goals**:  
+- Automate ingestion and preprocessing for at least 90% of incoming legal documents.  
+- Achieve over 80% accuracy in fraud detection and dispute categorization.  
+
+**Expected Benefits**:  
+- Save time and resources for legal professionals.  
+- Provide actionable insights to support legal decision-making.  
+
+---
+
+### 9. Conclusion  
+
+This project demonstrates the integration of advanced data pipelines and machine learning models to address challenges in legal document analysis. By automating workflows and enhancing insights, it offers significant value to legal professionals and organizations.  
+
+---
+
+## Technology Stack  
+
+- **ETL**: Apache Airflow.  
+- **Backend**: FastAPI.  
+- **Frontend**: Streamlit.  
+- **Data Storage**: Snowflake and Pinecone.  
+- **Models**: OpenAI GPT-4, HuggingFace embeddings, and scikit-learn-based classifiers.  
+
+---
+
+## Benefits  
+
+1. **Fraud Detection**: Robust analysis using embeddings and classifiers.  
+2. **Dispute Analysis**: Accurate categorization and outcome prediction.  
+3. **Precedent Retrieval**: Enhanced case retrieval with summaries.  
+4. **Scalability**: Support for large-scale datasets.  
+5. **User-Friendly**: Streamlit provides an accessible interface.  
