@@ -1,23 +1,15 @@
 # Final Project
 
 
-**Contribution Breakdown**:
+
+
+
+---
+##Contribution Breakdown:
 - Chiu Meng Che: 34%
 - Shraddha Bhandarkar: 33%
 - Kefan Zhang: 33%
 
-
----
-
-## Repository Guidelines
-
-1. **Submission Rules**:  
-   - No code changes or pushes are allowed after the submission date (except for edits to `README.md`).  
-2. **Codelab Documentation**:  
-   - A detailed Codelab document describing the project journey is included.  
-   - This `README.md` serves as a guide to the repository contents.  
-3. **Repository Privacy**:  
-   - The repository will remain private until the deadline to prevent plagiarism.  
 
 ---
 
