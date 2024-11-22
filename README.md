@@ -87,8 +87,6 @@ Develop an end-to-end system that automates data ingestion, preprocessing, and l
 5. **Day 1-18**: Frontend dashboard implementation with Streamlit.  
 6. **Day 18-22**: Testing and deployment on a cloud platform.  
 
-**Timeline**:  
-- Detailed timeline is available in the GitHub Project section.  
 
 ---
 
