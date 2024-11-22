@@ -80,12 +80,12 @@ Develop an end-to-end system that automates data ingestion, preprocessing, and l
 ### 5. Project Plan and Timeline  
 
 **Milestones and Deliverables**:  
-1. **Week 1-2**: Data ingestion pipeline setup with Apache Airflow.  
-2. **Week 3-4**: Preprocessing scripts for text cleaning and embedding generation.  
-3. **Week 5**: Pinecone integration for similarity search.  
-4. **Week 6**: Backend API development with FastAPI.  
-5. **Week 7**: Frontend dashboard implementation with Streamlit.  
-6. **Week 8**: Testing and deployment on a cloud platform.  
+1. **Day 1-3**: Data ingestion pipeline setup with Apache Airflow.  
+2. **Day 3-5**: Preprocessing scripts for text cleaning and embedding generation.  
+3. **Day 5-7**: Pinecone integration for similarity search.  
+4. **Day 1-18**: Backend API development with FastAPI.  
+5. **Day 1-18**: Frontend dashboard implementation with Streamlit.  
+6. **Day 18-22**: Testing and deployment on a cloud platform.  
 
 **Timeline**:  
 - Detailed timeline is available in the GitHub Project section.  
@@ -95,9 +95,9 @@ Develop an end-to-end system that automates data ingestion, preprocessing, and l
 ### 6. Resources and Team  
 
 **Personnel**:  
-- **Member 1**: Backend development and API integration.  
-- **Member 2**: Frontend development and user interface design.  
-- **Member 3**: ETL pipeline and model implementation.  
+- **Member 1**:  Pipeline and model implementation. 
+- **Member 2**:  Backend development and API integration.
+- **Member 3**:  Frontend development and user interface design. 
 
 ---
 
