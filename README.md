@@ -36,7 +36,7 @@ This project aims to provide two intelligent services tailored for lawyers:
 1. **Case Summarization (Summarization Agent)**
    - **Function**: Generates concise summaries for uploaded case files (PDF).
    - **Implementation**:
-     - Uses OpenAI GPT-3.5 Turbo API to generate summaries from text content.
+     - Uses OpenAI GPT-4 to generate summaries from text content.
      - Generates vector embeddings for the content and stores them in the Pinecone database.
 
 2. **Similar Case Retrieval and Advice Generation (Strategy Generation Agent)**
