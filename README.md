@@ -24,7 +24,7 @@ WE ATTEST THAT WE HAVEN'T USED ANY OTHER STUDENTS' WORK IN OUR ASSIGNMENT AND AB
 
 This project aims to provide two intelligent services tailored for lawyers:
 
-1. **Solution 1**: Lawyers can upload case files (PDF). The system will generate a case summary, retrieve similar cases from the Pinecone database, and generate strategic advice using GPT models. This solution simplifies document review, acting as a "junior assistant" for lawyers.
+1. **Solution 1**: Lawyers can upload case files (PDF). The system will generate a case summary, and generate strategic advice using GPT models. This solution simplifies document review, acting as a "junior assistant" for lawyers.
 2. **Solution 2**: Lawyers can input case ideas using four core elements: Facts, Issues, Reasoning, and Decision. The system generates embeddings for these elements, searches for similar metadata in the Pinecone database (including related documents and the four elements), and generates advice using GPT models. This solution provides lawyers with comparable historical cases, especially for rare or unique case scenarios.
 
 ---
@@ -41,7 +41,6 @@ This project aims to provide two intelligent services tailored for lawyers:
 
 2. **Similar Case Retrieval and Advice Generation (Strategy Generation Agent)**
    - **Function**:
-     - Retrieves the most relevant cases from the Pinecone database. For some new cases, they may not be accessible through Chatgpt, and it's time consuming to search by google.
      - Uses OpenAI GPT-4 to generate strategic advice based on retrieved metadata (Facts, Issues, Reasoning, Decision). Lawyer may not need any professional suggestions, but we can provide a new perspective from AI.
    - **Implementation**:
      - Create vector embeddings.
@@ -107,9 +106,9 @@ This project aims to provide two intelligent services tailored for lawyers:
 1. The user uploads a case file (PDF).
 2. The system extracts file content and performs the following:
    - **Summarization**: Generates a concise summary using NLP models.
-   - **Embedding Generation**: Creates vector embeddings using `all-MiniLM-L6-v2`.
+   - **Embedding Generation**: Creates vector embeddings.
    - **Storage**: Stores embeddings in Pinecone and metadata in Snowflake.
-3. The system retrieves similar cases and uses GPT to generate strategic advice.
+3. The system uses GPT to generate strategic advice.
 4. Users can perform additional web searches for unresolved questions.
 
 ### Solution 2 Workflow
