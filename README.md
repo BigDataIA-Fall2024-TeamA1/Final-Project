@@ -34,21 +34,21 @@ This project aims to provide two intelligent services tailored for lawyers:
 ### Solution 1
 
 1. **Case Summarization (Summarization Agent)**
-   - **Function**: Generates concise summaries for uploaded case files (PDF).
+   - **Function**: Generates concise summaries for uploaded case files (PDF), so lawyer can quickly read plenty of cases in a short time.
    - **Implementation**:
      - Uses OpenAI GPT-4 to generate summaries from text content.
      - Generates vector embeddings for the content and stores them in the Pinecone database.
 
 2. **Similar Case Retrieval and Advice Generation (Strategy Generation Agent)**
    - **Function**:
-     - Retrieves the most relevant cases from the Pinecone database.
-     - Uses OpenAI GPT-4 to generate strategic advice based on retrieved metadata (Facts, Issues, Reasoning, Decision).
+     - Retrieves the most relevant cases from the Pinecone database. For some new cases, they may not be accessible through Chatgpt, and it's time consuming to search by google.
+     - Uses OpenAI GPT-4 to generate strategic advice based on retrieved metadata (Facts, Issues, Reasoning, Decision). Lawyer may not need any professional suggestions, but we can provide a new perspective from AI.
    - **Implementation**:
      - Create vector embeddings.
      - Performs cosine similarity search within Pinecone.
 
 3. **One-Click Web Search (Web Search Agent)**
-   - **Function**: Provides online search for user queries.
+   - **Function**: Provides online search for user queries. 
    - **Implementation**:
      - Transforms user queries into natural language search.
      - Summarizes search results using GPT models and presents concise answers.
@@ -58,7 +58,7 @@ This project aims to provide two intelligent services tailored for lawyers:
 ### Solution 2
 
 1. **Query Completion (Query Completion Agent)**
-   - **Function**: Completes incomplete descriptions provided by lawyers (Facts, Issues, Reasoning, Decision).
+   - **Function**: Completes incomplete descriptions provided by lawyers (Facts, Issues, Reasoning, Decision). Lawyers may not have a idea about their cases, and we support fuzzy search. Lawyers can also search for a case of miraculous turnaround, which probably gives them inspirations to turn the tables.
    - **Implementation**:
      - Uses OpenAI GPT-4 to complete user inputs.
      - Extracts core elements and generates semantic embeddings.
@@ -74,10 +74,6 @@ This project aims to provide two intelligent services tailored for lawyers:
    - **Implementation**:
      - Uses GPT-4 to create a structured report, including legal insights and recommended actions.
 
-4. **Strategy Advice Generation (Strategy Generation Agent)**
-   - **Function**: Combines user inputs and retrieved data to generate personalized recommendations.
-   - **Implementation**:
-     - GPT-4 analyzes user input and retrieved case data to provide actionable solutions.
 
 ---
 
