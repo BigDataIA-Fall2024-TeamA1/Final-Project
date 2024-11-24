@@ -41,7 +41,7 @@ This project aims to provide two intelligent services tailored for lawyers:
 
 2. **Similar Case Retrieval and Advice Generation (Strategy Generation Agent)**
    - **Function**:
-     - Uses OpenAI GPT-4 to generate strategic advice based on vector embeddings(Facts, Issues, Reasoning, Decision). Lawyer may not need any professional suggestions, but we can provide a new perspective from AI.
+     - Uses OpenAI GPT-4 to generate strategic advice based on vector embeddings. Lawyer may not need any professional suggestions, but we can provide a new perspective from AI.
    - **Implementation**:
      - Create vector embeddings.
      - Performs cosine similarity search within Pinecone.
