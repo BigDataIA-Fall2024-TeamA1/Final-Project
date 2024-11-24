@@ -44,7 +44,7 @@ This project aims to provide two intelligent services tailored for lawyers:
      - Retrieves the most relevant cases from the Pinecone database.
      - Uses OpenAI GPT-4 to generate strategic advice based on retrieved metadata (Facts, Issues, Reasoning, Decision).
    - **Implementation**:
-     - Uses HuggingFace model `all-MiniLM-L6-v2` to create vector embeddings (free model).
+     - Create vector embeddings.
      - Performs cosine similarity search within Pinecone.
 
 3. **One-Click Web Search (Web Search Agent)**
@@ -66,7 +66,7 @@ This project aims to provide two intelligent services tailored for lawyers:
 2. **Case Retrieval (Case Retrieval Agent)**
    - **Function**: Searches Pinecone for cases similar to the lawyer's input.
    - **Implementation**:
-     - Uses `all-MiniLM-L6-v2` to generate input embeddings.
+     - Generate input embeddings.
      - Searches using Pinecone's vector similarity search.
 
 3. **Metadata Analysis and Recommendations**
@@ -89,7 +89,7 @@ This project aims to provide two intelligent services tailored for lawyers:
 
 2. **Natural Language Processing**
    - **HuggingFace Models**:
-     - `all-MiniLM-L6-v2`: Generates vector embeddings for similarity search (free and lightweight).
+     - Generates vector embeddings for similarity search.
    - **OpenAI GPT-4**:
      - Used for summarization, query completion, strategic advice generation, and case analysis.
 
