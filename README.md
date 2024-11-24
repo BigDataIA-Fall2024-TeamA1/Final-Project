@@ -125,6 +125,9 @@ This project aims to provide two intelligent services tailored for lawyers:
 
 ---
 
+## Project Video Link
+https://www.youtube.com/watch?v=UkHFD-VeG_c
+
 ## Project Value
 
 1. **Efficiency**: Automates summarization and strategy generation, reducing repetitive work for lawyers.
