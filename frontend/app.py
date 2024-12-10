@@ -1,135 +1,139 @@
 import streamlit as st
 import requests
 
-# Backend Base URL
-BACKEND_URL = "http://127.0.0.1:8000"
+# Backend API URL
+BASE_URL = "http://127.0.0.1:8000"
 
-# Sidebar for Agent Selection
-st.sidebar.title("Legal Case Assistant")
-agent = st.sidebar.radio(
-    "Choose an Agent",
-    [
-        "Generate Report",
-        "Search Legal Resources",
-        "Retrieve Relevant Cases",
-        "Generate Strategy"
-    ]
+# Streamlit Page Configuration
+st.set_page_config(
+    page_title="Legal Assistant Chat",
+    page_icon="⚖️",
+    layout="wide",
 )
 
-# Right Pane - Dynamic Content
-if agent == "Generate Report":
-    st.title("Generate Legal Report")
+# Initialize session state
+if "messages" not in st.session_state:
+    st.session_state["messages"] = [
+        {"role": "assistant", "content": "Hello! I'm your Legal Assistant. How can I help you today?"}
+    ]
+if "current_task" not in st.session_state:
+    st.session_state["current_task"] = None
 
-    # User inputs for metadata
-    lawyer_name = st.text_input("Lawyer Name", key="lawyer_name")
-    law_firm = st.text_input("Law Firm Name", key="law_firm")
-    court = st.text_input("Court Name", key="court_name")
-    jurisdiction = st.text_input("Jurisdiction", key="jurisdiction")
-    facts = st.text_area("Facts", key="facts")
-    issues = st.text_area("Issues", key="issues")
-    reasoning = st.text_area("Reasoning", key="reasoning")
-    decision = st.text_area("Decision", key="decision")
-    feedback = st.text_area("Feedback for Improvement (Optional)", key="feedback")
+# Sidebar: Saved Chats
+with st.sidebar:
+    st.title("Saved Chats")
+    saved_chats = st.radio("Select a chat", ["New Chat"] + ["Chat 1", "Chat 2"])
+    if st.button("Start New Chat"):
+        st.session_state["messages"] = [
+            {"role": "assistant", "content": "Hello! I'm your Legal Assistant. How can I help you today?"}
+        ]
+        st.session_state["current_task"] = None
 
-    if st.button("Generate Report"):
-        if all([lawyer_name, law_firm, court, jurisdiction, facts, issues, reasoning, decision]):
-            with st.spinner("Generating report..."):
-                metadata = {
-                    "lawyer_name": lawyer_name,
-                    "law_firm": law_firm,
-                    "court": court,
-                    "jurisdiction": jurisdiction,
-                    "facts": facts,
-                    "issues": issues,
-                    "reasoning": reasoning,
-                    "decision": decision,
-                    "feedback": feedback
-                }
-                response = requests.post(f"{BACKEND_URL}/solution2/report", json=metadata)
+# Chat Display
+st.title("💼 Legal Case Assistant")
+for msg in st.session_state["messages"]:
+    st.chat_message(msg["role"]).write(msg["content"])
 
+# Welcome Message and Task Buttons
+if not st.session_state["current_task"]:
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        if st.button("Summarize Document"):
+            st.session_state["current_task"] = "summarize"
+            st.session_state["messages"].append(
+                {"role": "assistant", "content": "Would you like to summarize an existing case or upload a document?"}
+            )
+    with col2:
+        if st.button("Generate Report"):
+            st.session_state["current_task"] = "report"
+            st.session_state["messages"].append(
+                {"role": "assistant", "content": "Let's generate a report. Please provide the required information."}
+            )
+    with col3:
+        if st.button("Generate Strategy"):
+            st.session_state["current_task"] = "strategy"
+            st.session_state["messages"].append(
+                {"role": "assistant", "content": "Would you like to use an existing case or provide details?"}
+            )
+
+# Interactive Chat Area
+if st.session_state["current_task"]:
+    user_input = st.chat_input("Type your response here...")
+    uploaded_file = st.file_uploader("Upload a document (optional)", type=["txt", "pdf", "docx"])
+
+    # Handle User Input
+    if user_input:
+        st.session_state["messages"].append({"role": "user", "content": user_input})
+        st.chat_message("user").write(user_input)
+        task = st.session_state["current_task"]
+
+        if task == "summarize":
+            if "existing" in user_input.lower():
+                case_id = st.text_input("Enter Case ID (Docket Number):")
+                if st.button("Fetch Summary") and case_id:
+                    response = requests.post(f"{BASE_URL}/summarize", json={"case_id": case_id})
+                    if response.status_code == 200:
+                        summary = response.json().get("response", "No summary available.")
+                        st.session_state["messages"].append({"role": "assistant", "content": summary})
+                        st.chat_message("assistant").write(summary)
+                    else:
+                        st.error("Error fetching case summary. Please check the case ID.")
+            elif uploaded_file:
+                file_content = uploaded_file.read().decode("utf-8")
+                response = requests.post(f"{BASE_URL}/summarize", json={"content": file_content})
                 if response.status_code == 200:
-                    result = response.json()
-                    report_content = result["report_content"]
-                    word_file = result["word_file"]
-                    pdf_file = result["pdf_file"]
-
-                    st.subheader("Generated Report")
-                    st.write(report_content)
-
-                    st.download_button("Download as Word", word_file, file_name="legal_report.docx")
-                    st.download_button("Download as PDF", pdf_file, file_name="legal_report.pdf")
-
-                    if st.button("Regenerate Report"):
-                        st.write("Provide feedback in the 'Feedback' section and click 'Generate Report' again.")
+                    summary = response.json().get("response", "No summary available.")
+                    st.session_state["messages"].append({"role": "assistant", "content": summary})
+                    st.chat_message("assistant").write(summary)
                 else:
-                    st.error(f"Error: {response.json().get('detail', 'Unknown error')}")
-        else:
-            st.error("Please fill in all required fields!")
+                    st.error("Error summarizing the document.")
+            else:
+                st.error("Please provide a case ID or upload a document to summarize.")
 
-elif agent == "Search Legal Resources":
-    st.title("Search Legal Resources")
-    query = st.text_input("Enter Search Query", key="search_query")
-
-    if st.button("Search", key="search_button"):
-        if query.strip():
-            with st.spinner("Searching..."):
-                response = requests.post(f"{BACKEND_URL}/solution2/search", json={"query": query})
-
-                if response.status_code == 200:
-                    results = response.json().get("results", [])
-                    st.subheader("Search Results:")
-                    for result in results:
-                        st.write(f"- [{result['title']}]({result['link']})")
-                        st.write(result['snippet'])
+        elif task == "report":
+            # Collect Report Metadata
+            metadata = {
+                "lawyer_name": st.text_input("Lawyer Name"),
+                "law_firm": st.text_input("Law Firm"),
+                "court": st.text_input("Court"),
+                "jurisdiction": st.text_input("Jurisdiction"),
+                "facts": st.text_area("Facts"),
+                "issues": st.text_area("Issues"),
+                "reasoning": st.text_area("Reasoning"),
+                "decision": st.text_area("Decision"),
+            }
+            if st.button("Generate Report"):
+                if all(metadata.values()):
+                    response = requests.post(f"{BASE_URL}/generate_report", json=metadata)
+                    if response.status_code == 200:
+                        report = response.json().get("response", "No report generated.")
+                        st.session_state["messages"].append({"role": "assistant", "content": report})
+                        st.chat_message("assistant").write(report)
+                    else:
+                        st.error("Error generating report.")
                 else:
-                    st.error(f"Error: {response.json().get('detail', 'Unknown error')}")
-        else:
-            st.error("Please enter a search query!")
+                    st.error("Please fill in all the fields before generating the report.")
 
-elif agent == "Retrieve Relevant Cases":
-    st.title("Retrieve Relevant Court Cases")
-    case_query = st.text_input("Enter Case Query", key="case_query")
-
-    if st.button("Retrieve Cases", key="retrieve_cases"):
-        if case_query.strip():
-            with st.spinner("Retrieving cases..."):
-                response = requests.post(f"{BACKEND_URL}/solution2/cases", json={"query": case_query})
-
-                if response.status_code == 200:
-                    cases = response.json().get("cases", [])
-                    st.subheader("Relevant Cases:")
-                    for case in cases:
-                        st.write(f"- [{case['title']}]({case['url']})")
+        elif task == "strategy":
+            # Collect Strategy Details
+            strategy_details = {
+                "facts": st.text_area("Facts"),
+                "issues": st.text_area("Issues"),
+                "reasoning": st.text_area("Reasoning"),
+                "decision": st.text_area("Decision"),
+            }
+            if st.button("Generate Strategy"):
+                if all(strategy_details.values()):
+                    response = requests.post(f"{BASE_URL}/generate_strategy", json=strategy_details)
+                    if response.status_code == 200:
+                        strategy = response.json().get("response", "No strategy generated.")
+                        st.session_state["messages"].append({"role": "assistant", "content": strategy})
+                        st.chat_message("assistant").write(strategy)
+                    else:
+                        st.error("Error generating strategy.")
                 else:
-                    st.error(f"Error: {response.json().get('detail', 'Unknown error')}")
-        else:
-            st.error("Please enter a case query!")
+                    st.error("Please provide all required details to generate a strategy.")
 
-elif agent == "Generate Strategy":
-    st.title("Generate Legal Strategy")
-
-    # User inputs for metadata
-    facts = st.text_area("Facts", key="strategy_facts")
-    issues = st.text_area("Issues", key="strategy_issues")
-    reasoning = st.text_area("Reasoning", key="strategy_reasoning")
-    decision = st.text_area("Decision", key="strategy_decision")
-
-    if st.button("Generate Strategy", key="generate_strategy"):
-        if all([facts, issues, reasoning, decision]):
-            with st.spinner("Generating strategy..."):
-                metadata = {
-                    "facts": facts,
-                    "issues": issues,
-                    "reasoning": reasoning,
-                    "decision": decision
-                }
-                response = requests.post(f"{BACKEND_URL}/solution2/strategy", json={"metadata": metadata})
-
-                if response.status_code == 200:
-                    strategy = response.json().get("strategy", "No strategy available.")
-                    st.subheader("Generated Strategy:")
-                    st.write(strategy)
-                else:
-                    st.error(f"Error: {response.json().get('detail', 'Unknown error')}")
-        else:
-            st.error("Please fill in all required fields!")
+        # Reset Current Task
+        if st.button("Reset Task"):
+            st.session_state["current_task"] = None

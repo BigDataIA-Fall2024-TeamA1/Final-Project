@@ -18,6 +18,7 @@ langchain = "^0.0.208"
 python-dotenv = "^1.0.0"
 python-docx = "^0.8.11"
 fpdf = "^1.7.2"
+python-multipart = "^0.0.19"
 
 [build-system]
 requires = ["poetry-core"]
