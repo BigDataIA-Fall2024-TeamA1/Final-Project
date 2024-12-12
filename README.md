@@ -1,4 +1,4 @@
-# Final Project 
+# Lawyer Assistant Intelligent Platform
 
 ---
 
@@ -18,148 +18,121 @@ WE ATTEST THAT WE HAVEN'T USED ANY OTHER STUDENTS' WORK IN OUR ASSIGNMENT AND AB
 ![workflow](images/workflow_diagram.jpeg)
 
 ---
-## Project Overview
 
-### 1. Introduction  
 
-**Background**:  
-This project addresses inefficiencies in legal document management and analysis by leveraging modern data processing pipelines and machine learning models, including large language models (LLMs), to enhance fraud detection, dispute categorization, and decision-making.  
+## Project Description
 
-**Objective**:  
-Develop an end-to-end system that automates data ingestion, preprocessing, and legal document analysis, enabling users to interact with results through an intuitive application.  
+This project aims to provide two intelligent services tailored for lawyers:
 
----
-
-### 2. Scope  
-
-**Boundaries**:  
-- **Data Sources**: CourtListener API for legal documents.  
-- **Technologies**: Apache Airflow, FastAPI, Streamlit, Pinecone, OpenAI GPT-4, and Snowflake.  
-- **Deliverables**: A fully functional application with a backend API, ETL pipeline, LLM integration, and an interactive front-end interface.
-
-**Stakeholders**:  
-- Legal professionals seeking insights from past cases.  
-- Organizations aiming to enhance fraud detection and dispute resolution processes.
+1. **Solution 1**: Lawyers can upload case files (PDF). The system will generate a case summary, and generate strategic advice using GPT models. This solution simplifies document review, acting as a "junior assistant" for lawyers.
+2. **Solution 2**: Lawyers can input case ideas using four core elements: Facts, Issues, Reasoning, and Decision. The system generates embeddings for these elements, searches for similar metadata in the Pinecone database (including related documents and the four elements), and generates advice using GPT models. This solution provides lawyers with comparable historical cases, especially for rare or unique case scenarios.
 
 ---
 
-### 3. Problem Statement  
+## Key Functionalities
 
-**Current Challenges**:  
-- Manual analysis of legal documents is time-intensive and prone to errors.  
-- Limited tools for automated fraud detection, dispute categorization, and detailed summaries.  
+### Solution 1
 
-**Opportunities**:  
-- Streamlined legal analysis using AI-powered automation, including advanced LLM capabilities.  
-- Improved decision-making with detailed case summaries, similarity searches, and actionable recommendations.  
+1. **Case Summarization (Summarization Agent)**
+   - **Function**: Generates concise summaries for uploaded case files (PDF), so lawyer can quickly read plenty of cases in a short time.
+   - **Implementation**:
+     - Uses OpenAI GPT-4 to generate summaries from text content.
+     - Generates vector embeddings for the content and stores them in the Pinecone database.
 
----
+2. **Similar Case Retrieval and Advice Generation (Strategy Generation Agent)**
+   - **Function**:
+     - Uses OpenAI GPT-4 to generate strategic advice based on vector embeddings. Lawyer may not need any professional suggestions, but we can provide a new perspective from AI.
+   - **Implementation**:
+     - Create vector embeddings.
+     - Performs cosine similarity search within Pinecone.
 
-### 4. Methodology  
-
-**Data Sources**:  
-- CourtListener API or scraped legal documents.  
-
-**Technologies and Tools**:  
-- **ETL**: Apache Airflow.  
-- **Backend**: FastAPI for API management.  
-- **Frontend**: Streamlit for user interaction.  
-- **Data Storage**: Snowflake for structured data and Pinecone for vector embeddings.  
-- **Models**:  
-  - **OpenAI GPT-4**: Used for generating case summaries, detecting potential fraud, categorizing disputes, and providing recommendations.  
-  - **HuggingFace Embeddings**: e.g., `all-MiniLM-L6-v2` for converting legal texts into vector embeddings for similarity searches.  
-  - **Custom Fraud Detection Classifiers**: Built using scikit-learn or PyTorch.  
-
-**Data Pipeline Design**:  
-1. **Ingestion**: Automate fetching and storing raw data.  
-2. **Preprocessing**: Clean text, extract metadata, generate embeddings, and add fraud labels.  
-3. **Storage**: Store raw and processed data in appropriate databases.  
-
-**LLM Integration**:  
-- **Fraud Detection**: Use LLMs to analyze case descriptions for fraud indicators with prompts like:  
-  `"Does this text suggest potential fraud? Provide reasoning."`  
-- **Dispute Categorization**: Employ LLMs to classify disputes into predefined categories such as liability disputes or coverage disputes.  
-- **Summarization**: Generate concise case summaries using LLMs with prompts such as:  
-  `"Summarize this legal case in less than 200 words, focusing on the main legal issues and outcome."`  
-- **Recommendation Engine**: Suggest next steps by analyzing similar cases with LLMs.  
-
-**Data Processing and Transformation**:  
-- Use Python-based EDA to explore data and ensure quality transformations.  
-- Leverage LLM-generated embeddings for similarity searches and contextual analysis.  
+3. **One-Click Web Search (Web Search Agent)**
+   - **Function**: Provides online search for user queries. 
+   - **Implementation**:
+     - Transforms user queries into natural language search.
+     - Summarizes search results using GPT models and presents concise answers.
 
 ---
 
-### 5. Project Plan and Timeline  
+### Solution 2
 
-**Milestones and Deliverables**:  
-1. **Day 1-3**: Data ingestion pipeline setup with Apache Airflow.  
-2. **Day 3-5**: Preprocessing scripts for text cleaning and embedding generation.  
-3. **Day 5-7**: Pinecone integration for similarity search.  
-4. **Day 7-12**: LLM integration for fraud detection, categorization, and summaries.  
-5. **Day 1-18**: Backend API development with FastAPI.  
-6. **Day 1-18**: Frontend dashboard implementation with Streamlit.  
-7. **Day 18-22**: Testing and deployment on a cloud platform.  
+1. **Query Completion (Query Completion Agent)**
+   - **Function**: Completes incomplete descriptions provided by lawyers (Facts, Issues, Reasoning, Decision). Lawyers may not have a idea about their cases, and we support fuzzy search. Lawyers can also search for a case of miraculous turnaround, which probably gives them inspirations to turn the tables.
+   - **Implementation**:
+     - Uses OpenAI GPT-4 to complete user inputs.
+     - Extracts core elements and generates semantic embeddings.
 
----
+2. **Case Retrieval (Case Retrieval Agent)**
+   - **Function**: Searches Pinecone for cases similar to the lawyer's input.
+   - **Implementation**:
+     - Generate input embeddings.
+     - Searches using Pinecone's vector similarity search.
 
-### 6. Resources and Team  
+3. **Metadata Analysis and Recommendations**
+   - **Function**: Analyzes similar case metadata and documents, generating strategic advice.
+   - **Implementation**:
+     - Uses GPT-4 to create a structured report, including legal insights and recommended actions.
 
-**Personnel**:  
-- **Member 1**: Pipeline and model implementation, including LLM integration.  
-- **Member 2**: Backend development and API integration.  
-- **Member 3**: Frontend development and user interface design.  
-
----
-
-### 7. Risks and Mitigation Strategies  
-
-**Potential Risks**:  
-1. Inconsistent or missing data from external APIs.  
-2. Integration challenges between components (ETL, backend, frontend, LLM).  
-
-**Mitigation Strategies**:  
-- Perform data quality checks during ingestion.  
-- Use containerization (Docker) to ensure seamless integration.  
-- Apply LLM prompt engineering techniques to enhance performance.  
 
 ---
 
-### 8. Expected Outcomes and Benefits  
+## Technology Stack
 
-**Measurable Goals**:  
-- Automate ingestion and preprocessing for at least 90% of incoming legal documents.  
-- Achieve over 80% accuracy in fraud detection and dispute categorization.  
-- Provide clear, actionable summaries for 95% of analyzed cases.  
+1. **Data Processing and Storage**
+   - **Pinecone**: Stores case file embeddings and metadata for fast similarity search.
+   - **Snowflake**: Stores case metadata and search history for further analysis.
 
-**Expected Benefits**:  
-- Save time and resources for legal professionals.  
-- Provide actionable insights to support legal decision-making.  
-- Enhance understanding of complex legal cases through LLM-powered summaries.  
+2. **Natural Language Processing**
+   - **HuggingFace Models**:
+     - Generates vector embeddings for similarity search.
+   - **OpenAI GPT-4**:
+     - Used for summarization, query completion, strategic advice generation, and case analysis.
 
----
+3. **Frontend and Backend**
+   - **Backend**:
+     - **FastAPI**: Manages API requests and integrates NLP models and database operations.
+   - **Frontend**:
+     - **Streamlit**: Provides a user-friendly interface for file upload and result display.
 
-### 9. Conclusion  
-
-This project demonstrates the integration of advanced data pipelines, vector databases, and large language models to address challenges in legal document analysis. By automating workflows and enhancing insights, it offers significant value to legal professionals and organizations.
-
----
-
-## Technology Stack  
-
-- **ETL**: Apache Airflow.  
-- **Backend**: FastAPI.  
-- **Frontend**: Streamlit.  
-- **Data Storage**: Snowflake and Pinecone.  
-- **LLMs**: OpenAI GPT-4 and HuggingFace embeddings.  
-- **Models**: Scikit-learn and PyTorch-based fraud classifiers.  
+4. **Task Scheduling and Search**
+   - **Apache Airflow**: Handles task scheduling, including file processing, vector generation, and data retrieval.
+   - **SERP API**: Enables online search for supplemental information.
 
 ---
 
-## Benefits  
+## Workflow
 
-1. **Fraud Detection**: Robust analysis using embeddings and LLMs.  
-2. **Dispute Analysis**: Accurate categorization and outcome prediction.  
-3. **Case Summarization**: Generate concise, user-friendly summaries of legal cases.  
-4. **Precedent Retrieval**: Enhanced case retrieval through similarity searches.  
-5. **Scalability**: Support for large-scale datasets through Pinecone and LLM integration.  
-6. **User-Friendly**: Streamlit provides an intuitive interface for legal professionals.  
+### Solution 1 Workflow
+1. The user uploads a case file (PDF).
+2. The system extracts file content and performs the following:
+   - **Summarization**: Generates a concise summary using NLP models.
+   - **Embedding Generation**: Creates vector embeddings.
+   - **Storage**: Stores embeddings in Pinecone and metadata in Snowflake.
+3. The system uses GPT to generate strategic advice.
+4. Users can perform additional web searches for unresolved questions.
+
+### Solution 2 Workflow
+1. The user inputs four core elements: Facts, Issues, Reasoning, Decision.
+2. **Query Completion**:
+   - Completes incomplete inputs using GPT.
+   - Generates embeddings for the completed input.
+3. **Case Retrieval**:
+   - Searches Pinecone for the most relevant cases.
+   - Retrieves metadata and related documents.
+4. **Advice Generation**:
+   - GPT generates a report based on retrieved metadata.
+5. The system presents the advice and related case details to the user.
+
+---
+
+## Project Video Link
+https://www.youtube.com/watch?v=UkHFD-VeG_c
+
+## Project Value
+
+1. **Efficiency**: Automates summarization and strategy generation, reducing repetitive work for lawyers.
+2. **Intelligent Support**: Provides precise case analysis and advice through vector search and GPT.
+3. **Flexibility**: Supports both document-based workflows (Solution 1) and idea-based workflows (Solution 2).
+4. **Cost-Effectiveness**: Utilizes free vector models (e.g., `all-MiniLM-L6-v2`) and efficient databases (Pinecone) to minimize costs.
+
+This project aims to be an indispensable tool for lawyers, enhancing their productivity and providing valuable insights for legal analysis.
