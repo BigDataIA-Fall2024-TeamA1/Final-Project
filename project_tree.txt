@@ -1,0 +1,28 @@
+.
+├── README.md
+├── airflow
+│   ├── dags
+│   │   ├── legal_case_dag.py
+│   │   └── modules
+│   │       └── legal_case_processing.py
+│   ├── poetry.lock
+│   └── pyproject.toml
+├── backend
+│   ├── __pycache__
+│   │   ├── fastapi1.cpython-310.pyc
+│   │   └── openai_module.cpython-310.pyc
+│   ├── fastapi1.py
+│   ├── openai_module.py
+│   ├── poetry.lock
+│   ├── pyproject.toml
+│   ├── test.py
+│   └── test_json.py
+├── frontend
+│   ├── app.py
+│   ├── poetry.lock
+│   └── pyproject.toml
+├── images
+│   └── workflow_diagram.jpeg
+└── project_tree.txt
+
+8 directories, 18 files
