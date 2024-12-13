@@ -125,6 +125,9 @@ This project aims to provide two intelligent services tailored for lawyers:
 
 ---
 
+## CodeLab
+https://docs.google.com/document/d/1VWno-QaJeqhGaypo58udlU1Fef-GXxOGoRelIDyttXA/edit?usp=sharing
+
 ## Project Video Link
 https://www.youtube.com/watch?v=UkHFD-VeG_c
 
