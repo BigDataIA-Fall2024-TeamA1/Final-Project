@@ -139,3 +139,7 @@ https://www.youtube.com/watch?v=UkHFD-VeG_c
 4. **Cost-Effectiveness**: Utilizes free vector models (e.g., `all-MiniLM-L6-v2`) and efficient databases (Pinecone) to minimize costs.
 
 This project aims to be an indispensable tool for lawyers, enhancing their productivity and providing valuable insights for legal analysis.
+
+3.148.105.65:8501
+3.148.105.65:8502
+3.148.105.65:8503
