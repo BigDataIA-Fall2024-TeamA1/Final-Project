@@ -1,56 +1,57 @@
 import streamlit as st
 import requests
 
-# API URL
-API_URL_TEXT = "http://127.0.0.1:8000/generate_summary"
-API_URL_FILE = "http://127.0.0.1:8000/upload_file_summary"
+# Adjust the URL to the location of your FastAPI backend
+API_URL = "http://localhost:8000"
 
 st.title("Legal Case Summary Generator")
 
-# 选项：用户选择输入还是上传文件
-option = st.radio("Choose Input Method:", ["Enter Details Manually", "Upload a File"])
+option = st.radio("Choose input method", ("Upload a file", "Input details manually"))
 
-if option == "Enter Details Manually":
-    st.header("Input Details to Generate Summary")
-    facts = st.text_area("Enter Facts", placeholder="Provide the facts of the case.")
-    issues = st.text_area("Enter Issues", placeholder="What are the key issues of the case?")
-    reasoning = st.text_area("Enter Reasoning", placeholder="Provide the reasoning or legal arguments.")
-    decision = st.text_area("Enter Decision", placeholder="What was the decision or outcome?")
+if option == "Upload a file":
+    uploaded_file = st.file_uploader("Please upload the case file (txt, pdf, docx, jpg, png)")
+    if uploaded_file is not None:
+        # Send file to backend
+        files = {'file': (uploaded_file.name, uploaded_file.read(), uploaded_file.type)}
+        response = requests.post(f"{API_URL}/upload_file", files=files)  # Adjusted API endpoint for file upload
+        
+        if response.status_code == 200:
+            data = response.json()
+            if data.get("report"):
+                st.subheader("Generated Summary")
+                # Display summary in a scrollable text area
+                st.text_area("Summary", data["report"], height=300)
+            else:
+                st.write(data.get("message", "No summary generated."))
+        else:
+            st.error("Error processing file. Check the backend logs.")
+            
+elif option == "Input details manually":
+    # Collect user input
+    facts = st.text_area("Enter Facts")
+    issues = st.text_area("Enter Issues")
+    reasoning = st.text_area("Enter Reasoning")
+    decision = st.text_area("Enter Decision")
 
     if st.button("Generate Summary"):
-        # 构造请求体
+        # Construct request data
         request_data = {
             "facts": facts,
             "issues": issues,
             "reasoning": reasoning,
             "decision": decision
         }
-        try:
-            response = requests.post(API_URL_TEXT, json=request_data)
-            if response.status_code == 200:
-                data = response.json()
+        
+        # Send request to backend
+        response = requests.post(f"{API_URL}/generate_summary", json=request_data)  # Adjusted API endpoint for summary generation
+        
+        if response.status_code == 200:
+            data = response.json()
+            if data.get("summary"):
                 st.subheader("Generated Summary")
-                st.write(data["summary"])
+                # Display summary in a scrollable text area
+                st.text_area("Summary", data["summary"], height=300)
             else:
-                st.error(f"Error: {response.status_code}")
-                st.error(response.json().get("detail", "Unknown error"))
-        except Exception as e:
-            st.error(f"An error occurred: {str(e)}")
-
-elif option == "Upload a File":
-    st.header("Upload a File to Generate Summary")
-    uploaded_file = st.file_uploader("Choose a file", type=["txt", "pdf", "docx"])
-
-    if st.button("Generate Summary from File") and uploaded_file:
-        try:
-            files = {"file": (uploaded_file.name, uploaded_file.read(), "application/octet-stream")}
-            response = requests.post(API_URL_FILE, files=files)
-            if response.status_code == 200:
-                data = response.json()
-                st.subheader("Generated Summary")
-                st.write(data["summary"])
-            else:
-                st.error(f"Error: {response.status_code}")
-                st.error(response.json().get("detail", "Unknown error"))
-        except Exception as e:
-            st.error(f"An error occurred: {str(e)}")
+                st.write(data.get("message", "No summary generated."))
+        else:
+            st.error("Error processing input. Check the backend logs.")
